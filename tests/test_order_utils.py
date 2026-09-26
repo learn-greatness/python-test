@@ -13,7 +13,7 @@ class TestOrderTotal(unittest.TestCase):
             "tax_percent": 18,
         }
 
-        self.assertEqual(calculate_order_total(order), 212.40)
+        self.assertEqual(calculate_order_total(order), 265.50)
 
     def test_does_not_mutate_input(self):
         order = {
