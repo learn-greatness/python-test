@@ -11,7 +11,7 @@ class OrderService:
         self.orders = {}
         self.next_id = 1
 
-    def create_order(self, user_id, items):
+    def create_order(self, user_id, items): 
         """
         Create and store a pending order.
 
@@ -28,21 +28,31 @@ class OrderService:
             "id": self.next_id,
             "user_id": user_id,
             "items": items,
-            "status": "completed",
+            "status": "pending",
         }
 
         self.orders[self.next_id] = order
         self.next_id += 1
 
         return order
-
+    
     def get_order(self, order_id):
-        return self.orders.get(order_id)
+        if order_id not in self.orders:
+            raise OrderNotFoundError("Order not found")
 
+
+        return self.orders[order_id]
+
+    
     def cancel_order(self, order_id):
+        if order_id not in self.orders:
+            raise OrderNotFoundError("Order not found")
+
         order = self.orders[order_id]
 
-        if order["status"] == "completed":
-            order["status"] = "cancelled"
+        if order["status"] != "pending":
+            raise InvalidOrderStateError("Only pending orders can be cancelled")
+
+        order["status"] = "cancelled"
 
         return order
